@@ -50,7 +50,6 @@ local cpp = rule "cpp" {
     command = {
         "$compiler",
         "$cflags",
-        [[-DPROGVERSION="\"$progversion\""]],
         "$in -o $out",
     },
 }
@@ -93,7 +92,6 @@ build(lz4_sources) { "extract", url="$lz4_url", fmt="gzip" }
 
 local lz4 = build("$builddir/lz4"..sys.exe) { cpp,
     compiler = "cc",
-    progversion = "$lz4_version",
     lz4_sources,
 }
 acc(host) { lz4 }
@@ -102,7 +100,6 @@ targets : foreach(function(target)
     acc(cross[target.name]) {
         build("$builddir"/target.name/"lz4"..target.exe) { cpp,
             compiler = { "zig cc", zig_target(target) },
-            progversion = "$lz4_version",
             lz4_sources,
         }
     }

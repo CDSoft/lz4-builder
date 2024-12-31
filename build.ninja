@@ -29,7 +29,7 @@ cflags = -O3 -s -Ilz4-$lz4_version/lib
 
 rule cpp
   description = c++ $out
-  command = $compiler $cflags -DPROGVERSION="\"$progversion\"" $in -o $out
+  command = $compiler $cflags $in -o $out
 
 ######################################################################
 # lz4
@@ -41,28 +41,20 @@ build lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$l
   url = $lz4_url
 build $builddir/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
   compiler = cc
-  progversion = $lz4_version
 build $builddir/linux-x86_64/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
   compiler = zig cc -target x86_64-linux-gnu
-  progversion = $lz4_version
 build $builddir/linux-x86_64-musl/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
   compiler = zig cc -target x86_64-linux-musl
-  progversion = $lz4_version
 build $builddir/linux-aarch64/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
   compiler = zig cc -target aarch64-linux-gnu
-  progversion = $lz4_version
 build $builddir/linux-aarch64-musl/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
   compiler = zig cc -target aarch64-linux-musl
-  progversion = $lz4_version
 build $builddir/macos-x86_64/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
   compiler = zig cc -target x86_64-macos-none
-  progversion = $lz4_version
 build $builddir/macos-aarch64/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
   compiler = zig cc -target aarch64-macos-none
-  progversion = $lz4_version
 build $builddir/windows-x86_64/lz4.exe: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
   compiler = zig cc -target x86_64-windows-gnu
-  progversion = $lz4_version
 
 ######################################################################
 # Host binaries

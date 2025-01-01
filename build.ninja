@@ -25,12 +25,6 @@ rule extract
   description = extract $url
   command = curl -fsSL $url | PATH=$builddir:$$PATH tar x --$fmt
 
-cflags = -O3 -s -Ilz4-$lz4_version/lib
-
-rule cpp
-  description = c++ $out
-  command = $compiler $cflags $in -o $out
-
 ######################################################################
 # lz4
 ######################################################################
@@ -39,22 +33,254 @@ lz4_url = https://github.com/lz4/lz4/archive/refs/tags/v1.10.0.tar.gz
 build lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c: extract
   fmt = gzip
   url = $lz4_url
-build $builddir/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
-  compiler = cc
-build $builddir/linux-x86_64/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
-  compiler = zig cc -target x86_64-linux-gnu
-build $builddir/linux-x86_64-musl/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
-  compiler = zig cc -target x86_64-linux-musl
-build $builddir/linux-aarch64/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
-  compiler = zig cc -target aarch64-linux-gnu
-build $builddir/linux-aarch64-musl/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
-  compiler = zig cc -target aarch64-linux-musl
-build $builddir/macos-x86_64/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
-  compiler = zig cc -target x86_64-macos-none
-build $builddir/macos-aarch64/lz4: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
-  compiler = zig cc -target aarch64-macos-none
-build $builddir/windows-x86_64/lz4.exe: cpp lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c
-  compiler = zig cc -target x86_64-windows-gnu
+
+rule C-cc
+  description = cc $out
+  command = cc -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  depfile = $out.d
+
+rule C-ar
+  description = ar $out
+  command = ar -crs $out $in
+
+rule C-so
+  description = cc $out
+  command = cc -shared -o $out $in
+
+rule C-ld
+  description = cc $out
+  command = cc -o $out $in
+
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/bench.o: C-cc lz4-$lz4_version/programs/bench.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/lorem.o: C-cc lz4-$lz4_version/programs/lorem.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o: C-cc lz4-$lz4_version/programs/lz4cli.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/lz4io.o: C-cc lz4-$lz4_version/programs/lz4io.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/threadpool.o: C-cc lz4-$lz4_version/programs/threadpool.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/timefn.o: C-cc lz4-$lz4_version/programs/timefn.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/util.o: C-cc lz4-$lz4_version/programs/util.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/lz4.o: C-cc lz4-$lz4_version/lib/lz4.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/lz4file.o: C-cc lz4-$lz4_version/lib/lz4file.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o: C-cc lz4-$lz4_version/lib/lz4frame.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o: C-cc lz4-$lz4_version/lib/lz4hc.c
+build $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/xxhash.o: C-cc lz4-$lz4_version/lib/xxhash.c
+build $builddir/lz4: C-ld $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/bench.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/lorem.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/lz4io.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/threadpool.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/timefn.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/programs/util.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/lz4.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/lz4file.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o $builddir/tmp/lz4.tmp/lz4-$lz4_version/lib/xxhash.o
+
+rule zigcc-linux-x86_64-cc
+  description = zig cc -target x86_64-linux-gnu $out
+  command = zig cc -target x86_64-linux-gnu -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  depfile = $out.d
+
+rule zigcc-linux-x86_64-ar
+  description = zig ar $out
+  command = zig ar -crs $out $in
+
+rule zigcc-linux-x86_64-so
+  description = zig cc -target x86_64-linux-gnu $out
+  command = zig cc -target x86_64-linux-gnu -shared -o $out $in
+
+rule zigcc-linux-x86_64-ld
+  description = zig cc -target x86_64-linux-gnu $out
+  command = zig cc -target x86_64-linux-gnu -o $out $in
+
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-linux-x86_64-cc lz4-$lz4_version/programs/bench.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-linux-x86_64-cc lz4-$lz4_version/programs/lorem.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o: zigcc-linux-x86_64-cc lz4-$lz4_version/programs/lz4cli.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/lz4io.o: zigcc-linux-x86_64-cc lz4-$lz4_version/programs/lz4io.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/threadpool.o: zigcc-linux-x86_64-cc lz4-$lz4_version/programs/threadpool.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/timefn.o: zigcc-linux-x86_64-cc lz4-$lz4_version/programs/timefn.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/util.o: zigcc-linux-x86_64-cc lz4-$lz4_version/programs/util.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4.o: zigcc-linux-x86_64-cc lz4-$lz4_version/lib/lz4.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4file.o: zigcc-linux-x86_64-cc lz4-$lz4_version/lib/lz4file.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o: zigcc-linux-x86_64-cc lz4-$lz4_version/lib/lz4frame.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o: zigcc-linux-x86_64-cc lz4-$lz4_version/lib/lz4hc.c
+build $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/xxhash.o: zigcc-linux-x86_64-cc lz4-$lz4_version/lib/xxhash.c
+build $builddir/linux-x86_64/lz4: zigcc-linux-x86_64-ld $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/bench.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/lorem.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/lz4io.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/threadpool.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/timefn.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/util.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4file.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o $builddir/tmp/linux-x86_64/lz4.tmp/lz4-$lz4_version/lib/xxhash.o
+
+rule zigcc-linux-x86_64-musl-cc
+  description = zig cc -target x86_64-linux-musl $out
+  command = zig cc -target x86_64-linux-musl -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  depfile = $out.d
+
+rule zigcc-linux-x86_64-musl-ar
+  description = zig ar $out
+  command = zig ar -crs $out $in
+
+rule zigcc-linux-x86_64-musl-so
+  description = zig cc -target x86_64-linux-musl $out
+  command = zig cc -target x86_64-linux-musl -shared -o $out $in
+
+rule zigcc-linux-x86_64-musl-ld
+  description = zig cc -target x86_64-linux-musl $out
+  command = zig cc -target x86_64-linux-musl -o $out $in
+
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/programs/bench.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/programs/lorem.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/programs/lz4cli.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/lz4io.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/programs/lz4io.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/threadpool.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/programs/threadpool.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/timefn.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/programs/timefn.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/util.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/programs/util.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/lib/lz4.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4file.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/lib/lz4file.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/lib/lz4frame.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/lib/lz4hc.c
+build $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/xxhash.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/lib/xxhash.c
+build $builddir/linux-x86_64-musl/lz4: zigcc-linux-x86_64-musl-ld $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/bench.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/lorem.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/lz4io.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/threadpool.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/timefn.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/util.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4file.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o $builddir/tmp/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/lib/xxhash.o
+
+rule zigcc-linux-aarch64-cc
+  description = zig cc -target aarch64-linux-gnu $out
+  command = zig cc -target aarch64-linux-gnu -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  depfile = $out.d
+
+rule zigcc-linux-aarch64-ar
+  description = zig ar $out
+  command = zig ar -crs $out $in
+
+rule zigcc-linux-aarch64-so
+  description = zig cc -target aarch64-linux-gnu $out
+  command = zig cc -target aarch64-linux-gnu -shared -o $out $in
+
+rule zigcc-linux-aarch64-ld
+  description = zig cc -target aarch64-linux-gnu $out
+  command = zig cc -target aarch64-linux-gnu -o $out $in
+
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-linux-aarch64-cc lz4-$lz4_version/programs/bench.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-linux-aarch64-cc lz4-$lz4_version/programs/lorem.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o: zigcc-linux-aarch64-cc lz4-$lz4_version/programs/lz4cli.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/lz4io.o: zigcc-linux-aarch64-cc lz4-$lz4_version/programs/lz4io.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/threadpool.o: zigcc-linux-aarch64-cc lz4-$lz4_version/programs/threadpool.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/timefn.o: zigcc-linux-aarch64-cc lz4-$lz4_version/programs/timefn.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/util.o: zigcc-linux-aarch64-cc lz4-$lz4_version/programs/util.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4.o: zigcc-linux-aarch64-cc lz4-$lz4_version/lib/lz4.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4file.o: zigcc-linux-aarch64-cc lz4-$lz4_version/lib/lz4file.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o: zigcc-linux-aarch64-cc lz4-$lz4_version/lib/lz4frame.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o: zigcc-linux-aarch64-cc lz4-$lz4_version/lib/lz4hc.c
+build $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/xxhash.o: zigcc-linux-aarch64-cc lz4-$lz4_version/lib/xxhash.c
+build $builddir/linux-aarch64/lz4: zigcc-linux-aarch64-ld $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/bench.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/lorem.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/lz4io.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/threadpool.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/timefn.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/util.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4file.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o $builddir/tmp/linux-aarch64/lz4.tmp/lz4-$lz4_version/lib/xxhash.o
+
+rule zigcc-linux-aarch64-musl-cc
+  description = zig cc -target aarch64-linux-musl $out
+  command = zig cc -target aarch64-linux-musl -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  depfile = $out.d
+
+rule zigcc-linux-aarch64-musl-ar
+  description = zig ar $out
+  command = zig ar -crs $out $in
+
+rule zigcc-linux-aarch64-musl-so
+  description = zig cc -target aarch64-linux-musl $out
+  command = zig cc -target aarch64-linux-musl -shared -o $out $in
+
+rule zigcc-linux-aarch64-musl-ld
+  description = zig cc -target aarch64-linux-musl $out
+  command = zig cc -target aarch64-linux-musl -o $out $in
+
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/programs/bench.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/programs/lorem.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/programs/lz4cli.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/lz4io.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/programs/lz4io.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/threadpool.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/programs/threadpool.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/timefn.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/programs/timefn.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/util.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/programs/util.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/lib/lz4.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4file.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/lib/lz4file.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/lib/lz4frame.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/lib/lz4hc.c
+build $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/xxhash.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/lib/xxhash.c
+build $builddir/linux-aarch64-musl/lz4: zigcc-linux-aarch64-musl-ld $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/bench.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/lorem.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/lz4io.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/threadpool.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/timefn.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/util.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4file.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o $builddir/tmp/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/lib/xxhash.o
+
+rule zigcc-macos-x86_64-cc
+  description = zig cc -target x86_64-macos-none $out
+  command = zig cc -target x86_64-macos-none -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  depfile = $out.d
+
+rule zigcc-macos-x86_64-ar
+  description = zig ar $out
+  command = zig ar -crs $out $in
+
+rule zigcc-macos-x86_64-so
+  description = zig cc -target x86_64-macos-none $out
+  command = zig cc -target x86_64-macos-none -shared -o $out $in
+
+rule zigcc-macos-x86_64-ld
+  description = zig cc -target x86_64-macos-none $out
+  command = zig cc -target x86_64-macos-none -o $out $in
+
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-macos-x86_64-cc lz4-$lz4_version/programs/bench.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-macos-x86_64-cc lz4-$lz4_version/programs/lorem.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o: zigcc-macos-x86_64-cc lz4-$lz4_version/programs/lz4cli.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/lz4io.o: zigcc-macos-x86_64-cc lz4-$lz4_version/programs/lz4io.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/threadpool.o: zigcc-macos-x86_64-cc lz4-$lz4_version/programs/threadpool.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/timefn.o: zigcc-macos-x86_64-cc lz4-$lz4_version/programs/timefn.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/util.o: zigcc-macos-x86_64-cc lz4-$lz4_version/programs/util.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4.o: zigcc-macos-x86_64-cc lz4-$lz4_version/lib/lz4.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4file.o: zigcc-macos-x86_64-cc lz4-$lz4_version/lib/lz4file.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o: zigcc-macos-x86_64-cc lz4-$lz4_version/lib/lz4frame.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o: zigcc-macos-x86_64-cc lz4-$lz4_version/lib/lz4hc.c
+build $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/xxhash.o: zigcc-macos-x86_64-cc lz4-$lz4_version/lib/xxhash.c
+build $builddir/macos-x86_64/lz4: zigcc-macos-x86_64-ld $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/bench.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/lorem.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/lz4io.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/threadpool.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/timefn.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/programs/util.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4file.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o $builddir/tmp/macos-x86_64/lz4.tmp/lz4-$lz4_version/lib/xxhash.o
+
+rule zigcc-macos-aarch64-cc
+  description = zig cc -target aarch64-macos-none $out
+  command = zig cc -target aarch64-macos-none -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  depfile = $out.d
+
+rule zigcc-macos-aarch64-ar
+  description = zig ar $out
+  command = zig ar -crs $out $in
+
+rule zigcc-macos-aarch64-so
+  description = zig cc -target aarch64-macos-none $out
+  command = zig cc -target aarch64-macos-none -shared -o $out $in
+
+rule zigcc-macos-aarch64-ld
+  description = zig cc -target aarch64-macos-none $out
+  command = zig cc -target aarch64-macos-none -o $out $in
+
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-macos-aarch64-cc lz4-$lz4_version/programs/bench.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-macos-aarch64-cc lz4-$lz4_version/programs/lorem.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o: zigcc-macos-aarch64-cc lz4-$lz4_version/programs/lz4cli.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/lz4io.o: zigcc-macos-aarch64-cc lz4-$lz4_version/programs/lz4io.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/threadpool.o: zigcc-macos-aarch64-cc lz4-$lz4_version/programs/threadpool.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/timefn.o: zigcc-macos-aarch64-cc lz4-$lz4_version/programs/timefn.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/util.o: zigcc-macos-aarch64-cc lz4-$lz4_version/programs/util.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4.o: zigcc-macos-aarch64-cc lz4-$lz4_version/lib/lz4.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4file.o: zigcc-macos-aarch64-cc lz4-$lz4_version/lib/lz4file.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o: zigcc-macos-aarch64-cc lz4-$lz4_version/lib/lz4frame.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o: zigcc-macos-aarch64-cc lz4-$lz4_version/lib/lz4hc.c
+build $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/xxhash.o: zigcc-macos-aarch64-cc lz4-$lz4_version/lib/xxhash.c
+build $builddir/macos-aarch64/lz4: zigcc-macos-aarch64-ld $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/bench.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/lorem.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/lz4cli.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/lz4io.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/threadpool.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/timefn.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/programs/util.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4file.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4frame.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/lz4hc.o $builddir/tmp/macos-aarch64/lz4.tmp/lz4-$lz4_version/lib/xxhash.o
+
+rule zigcc-windows-x86_64-cc
+  description = zig cc -target x86_64-windows-gnu $out
+  command = zig cc -target x86_64-windows-gnu -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  depfile = $out.d
+
+rule zigcc-windows-x86_64-ar
+  description = zig ar $out
+  command = zig ar -crs $out $in
+
+rule zigcc-windows-x86_64-so
+  description = zig cc -target x86_64-windows-gnu $out
+  command = zig cc -target x86_64-windows-gnu -shared -o $out $in
+
+rule zigcc-windows-x86_64-ld
+  description = zig cc -target x86_64-windows-gnu $out
+  command = zig cc -target x86_64-windows-gnu -o $out $in
+
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/bench.o: zigcc-windows-x86_64-cc lz4-$lz4_version/programs/bench.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-windows-x86_64-cc lz4-$lz4_version/programs/lorem.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/lz4cli.o: zigcc-windows-x86_64-cc lz4-$lz4_version/programs/lz4cli.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/lz4io.o: zigcc-windows-x86_64-cc lz4-$lz4_version/programs/lz4io.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/threadpool.o: zigcc-windows-x86_64-cc lz4-$lz4_version/programs/threadpool.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/timefn.o: zigcc-windows-x86_64-cc lz4-$lz4_version/programs/timefn.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/util.o: zigcc-windows-x86_64-cc lz4-$lz4_version/programs/util.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/lz4.o: zigcc-windows-x86_64-cc lz4-$lz4_version/lib/lz4.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/lz4file.o: zigcc-windows-x86_64-cc lz4-$lz4_version/lib/lz4file.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/lz4frame.o: zigcc-windows-x86_64-cc lz4-$lz4_version/lib/lz4frame.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/lz4hc.o: zigcc-windows-x86_64-cc lz4-$lz4_version/lib/lz4hc.c
+build $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/xxhash.o: zigcc-windows-x86_64-cc lz4-$lz4_version/lib/xxhash.c
+build $builddir/windows-x86_64/lz4.exe: zigcc-windows-x86_64-ld $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/bench.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/lorem.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/lz4cli.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/lz4io.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/threadpool.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/timefn.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/util.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/lz4.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/lz4file.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/lz4frame.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/lz4hc.o $builddir/tmp/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/lib/xxhash.o
 
 ######################################################################
 # Host binaries

@@ -28,7 +28,6 @@ This Ninja build file will compile and install lz4 $lz4_version.
 ]]
 
 local F = require "F"
-local sys = require "sys"
 local targets = require "targets"
 
 var "builddir" ".build"
@@ -39,24 +38,16 @@ rule "extract" {
     command = "curl -fsSL $url | PATH=$builddir:$$PATH tar x --$fmt",
 }
 
-var "cflags" {
+local cflags = {
     "-O3",
     "-s",
     "-Ilz4-$lz4_version/lib",
 }
 
-local cpp = rule "cpp" {
-    description = "c++ $out",
-    command = {
-        "$compiler",
-        "$cflags",
-        "$in -o $out",
-    },
-}
-
-local function zig_target(target)
-    return {"-target", F{target.arch, target.os, target.libc}:str"-"}
-end
+build.cc : add "cflags" { cflags }
+targets : foreach(function(target)
+    build.zigcc[target.name] : add "cflags" { cflags }
+end)
 
 local host = {}         -- binaries for the current host compiled with cc/c++
 local cross = targets   -- binaries for all supported platforms compiled with zig
@@ -90,18 +81,12 @@ local lz4_sources = {
 
 build(lz4_sources) { "extract", url="$lz4_url", fmt="gzip" }
 
-local lz4 = build("$builddir/lz4"..sys.exe) { cpp,
-    compiler = "cc",
-    lz4_sources,
-}
+local lz4 = build.cc "$builddir/lz4" { lz4_sources }
 acc(host) { lz4 }
 
 targets : foreach(function(target)
     acc(cross[target.name]) {
-        build("$builddir"/target.name/"lz4"..target.exe) { cpp,
-            compiler = { "zig cc", zig_target(target) },
-            lz4_sources,
-        }
+        build.zigcc[target.name]("$builddir"/target.name/"lz4") { lz4_sources }
     }
 end)
 

@@ -16,7 +16,7 @@
 -- For further information about lz4-builder you can visit
 -- https://github.com/CDSoft/lz4-builder
 
-var "release" "lz4-build-r1"
+var "release" "2025-01-11"
 
 var "lz4_version" "1.10.0"
 
@@ -33,9 +33,13 @@ local targets = require "targets"
 var "builddir" ".build"
 clean "$builddir"
 
+var "tmp" "$builddir/tmp"
+var "bin" "$builddir/bin"
+var "all" "$builddir/all"
+
 rule "extract" {
     description = "extract $url",
-    command = "curl -fsSL $url | PATH=$builddir:$$PATH tar x --$fmt",
+    command = "curl -fsSL $url | PATH=$bin:$$PATH tar x --$fmt",
 }
 
 local cflags = {
@@ -44,9 +48,13 @@ local cflags = {
     "-Ilz4-$lz4_version/lib",
 }
 
-build.cc : add "cflags" { cflags }
+local ldflags = {
+    "-s",
+}
+
+build.cc : add "cflags" { cflags } : add "ldflags" { ldflags }
 targets : foreach(function(target)
-    build.zigcc[target.name] : add "cflags" { cflags }
+    build.zigcc[target.name] : add "cflags" { cflags } : add "ldflags" { ldflags }
 end)
 
 local host = {}         -- binaries for the current host compiled with cc/c++
@@ -81,12 +89,12 @@ local lz4_sources = {
 
 build(lz4_sources) { "extract", url="$lz4_url", fmt="gzip" }
 
-local lz4 = build.cc "$builddir/lz4" { lz4_sources }
+local lz4 = build.cc "$bin/lz4" { lz4_sources }
 acc(host) { lz4 }
 
 targets : foreach(function(target)
     acc(cross[target.name]) {
-        build.zigcc[target.name]("$builddir"/target.name/"lz4") { lz4_sources }
+        build.zigcc[target.name]("$all"/target.name/"lz4") { lz4_sources }
     }
 end)
 
@@ -111,11 +119,24 @@ rule "tar" {
 }
 
 local archives = targets : map(function(target)
-    return build("$builddir/${release}-"..target.name..".tar.gz") { "tar",
+    return build("$builddir/lz4-build-${release}-"..target.name..".tar.gz") { "tar",
         cross[target.name],
-        prefix = "$builddir"/target.name,
+        prefix = "$all"/target.name,
     }
 end)
 
-phony "all" { archives }
+local release_note = build "$builddir/README.md" {
+    description = "$out",
+    command = {
+        "(",
+        'echo "# LZ4 ${release_date}";',
+        'echo "";',
+        'echo "| Program | Version | Documentation |";',
+        'echo "| ------- | ------- | ------------- |";',
+        'echo "| lz4 | [$lz4_version]($lz4_url) | <https://github.com/lz4/lz4> |";',
+        ") > $out",
+    },
+}
+
+phony "all" { archives, release_note }
 help "all" "Build Lz4 archives for Linux, MacOS and Windows"

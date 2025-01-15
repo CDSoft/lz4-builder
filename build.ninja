@@ -17,7 +17,7 @@
 
 ninja_required_version = 1.11.1
 
-release = 2025-01-11
+release = 2025-01-15
 lz4_version = 1.10.0
 builddir = .build
 tmp = $builddir/tmp
@@ -26,7 +26,7 @@ all = $builddir/all
 
 rule extract
   description = extract $url
-  command = curl -fsSL $url | PATH=$bin:$$PATH tar x --$fmt
+  command = curl -fsSL $url | PATH=$bin:$$PATH tar x --$fmt $opt
 
 ######################################################################
 # lz4
@@ -35,6 +35,7 @@ rule extract
 lz4_url = https://github.com/lz4/lz4/archive/refs/tags/v1.10.0.tar.gz
 build lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$lz4_version/programs/lz4cli.c lz4-$lz4_version/programs/lz4io.c lz4-$lz4_version/programs/threadpool.c lz4-$lz4_version/programs/timefn.c lz4-$lz4_version/programs/util.c lz4-$lz4_version/lib/lz4.c lz4-$lz4_version/lib/lz4file.c lz4-$lz4_version/lib/lz4frame.c lz4-$lz4_version/lib/lz4hc.c lz4-$lz4_version/lib/xxhash.c: extract
   fmt = gzip
+  opt = --exclude=".circleci" --exclude=".github" --exclude="build" --exclude="contrib" --exclude="doc" --exclude="examples" --exclude="lib/dll" --exclude="lib/.gitignore" --exclude="lib/*.in" --exclude="lib/Makefile" --exclude="lib/README.md" --exclude="ossfuzz" --exclude="programs/.gitignore" --exclude="programs/*.in" --exclude="programs/*.1" --exclude="programs/*.md" --exclude="programs/Makefile" --exclude="tests" --exclude=".*" --exclude="*.yml" --exclude="CODING_STYLE" --exclude="INSTALL" --exclude="Makefile" --exclude="Makefile.inc" --exclude="NEWS" --exclude="*.md"
   url = $lz4_url
 
 rule C-cc
@@ -318,7 +319,7 @@ build $builddir/lz4-build-${release}-windows-x86_64.tar.gz: tar $all/windows-x86
 
 rule _builddir_README.md
   description = $out
-  command = ( echo "# LZ4 ${release_date}"; echo ""; echo "| Program | Version | Documentation |"; echo "| ------- | ------- | ------------- |"; echo "| lz4 | [$lz4_version]($lz4_url) | <https://github.com/lz4/lz4> |"; ) > $out
+  command = ( echo "# LZ4 ${release}"; echo ""; echo "| Program | Version | Documentation |"; echo "| ------- | ------- | ------------- |"; echo "| lz4 | [$lz4_version]($lz4_url) | <https://github.com/lz4/lz4> |"; ) > $out
 
 build $builddir/README.md: _builddir_README.md
 build all: phony $builddir/lz4-build-${release}-linux-x86_64.tar.gz $builddir/lz4-build-${release}-linux-x86_64-musl.tar.gz $builddir/lz4-build-${release}-linux-aarch64.tar.gz $builddir/lz4-build-${release}-linux-aarch64-musl.tar.gz $builddir/lz4-build-${release}-macos-x86_64.tar.gz $builddir/lz4-build-${release}-macos-aarch64.tar.gz $builddir/lz4-build-${release}-windows-x86_64.tar.gz $builddir/README.md

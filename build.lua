@@ -16,7 +16,7 @@
 -- For further information about lz4-builder you can visit
 -- https://github.com/CDSoft/lz4-builder
 
-var "release" "2025-01-11"
+var "release" "2025-01-15"
 
 var "lz4_version" "1.10.0"
 
@@ -39,7 +39,7 @@ var "all" "$builddir/all"
 
 rule "extract" {
     description = "extract $url",
-    command = "curl -fsSL $url | PATH=$bin:$$PATH tar x --$fmt",
+    command = "curl -fsSL $url | PATH=$bin:$$PATH tar x --$fmt $opt",
 }
 
 local cflags = {
@@ -87,7 +87,38 @@ local lz4_sources = {
     }),
 }
 
-build(lz4_sources) { "extract", url="$lz4_url", fmt="gzip" }
+build(lz4_sources) { "extract",
+    url = "$lz4_url",
+    fmt = "gzip",
+    opt = {
+        '--exclude=".circleci"',
+        '--exclude=".github"',
+        '--exclude="build"',
+        '--exclude="contrib"',
+        '--exclude="doc"',
+        '--exclude="examples"',
+        '--exclude="lib/dll"',
+        '--exclude="lib/.gitignore"',
+        '--exclude="lib/*.in"',
+        '--exclude="lib/Makefile"',
+        '--exclude="lib/README.md"',
+        '--exclude="ossfuzz"',
+        '--exclude="programs/.gitignore"',
+        '--exclude="programs/*.in"',
+        '--exclude="programs/*.1"',
+        '--exclude="programs/*.md"',
+        '--exclude="programs/Makefile"',
+        '--exclude="tests"',
+        '--exclude=".*"',
+        '--exclude="*.yml"',
+        '--exclude="CODING_STYLE"',
+        '--exclude="INSTALL"',
+        '--exclude="Makefile"',
+        '--exclude="Makefile.inc"',
+        '--exclude="NEWS"',
+        '--exclude="*.md"',
+    },
+}
 
 local lz4 = build.cc "$bin/lz4" { lz4_sources }
 acc(host) { lz4 }

@@ -29,6 +29,7 @@ This Ninja build file will compile and install lz4 $lz4_version.
 
 local F = require "F"
 local targets = require "targets"
+local sys = require "sys"
 
 var "builddir" ".build"
 clean "$builddir"
@@ -52,9 +53,14 @@ local ldflags = {
     "-s",
 }
 
-build.cc : add "cflags" { cflags } : add "ldflags" { ldflags }
+local function lto(target)
+    if target.os == "macos" then return {} end
+    return "-flto"
+end
+
+build.cc : add "cflags" { cflags, lto(sys) } : add "ldflags" { ldflags, lto(sys) }
 targets : foreach(function(target)
-    build.zigcc[target.name] : add "cflags" { cflags } : add "ldflags" { ldflags }
+    build.zigcc[target.name] : add "cflags" { cflags, lto(target) } : add "ldflags" { ldflags, lto(target) }
 end)
 
 local host = {}         -- binaries for the current host compiled with cc/c++

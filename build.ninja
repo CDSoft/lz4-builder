@@ -40,7 +40,7 @@ build lz4-$lz4_version/programs/bench.c lz4-$lz4_version/programs/lorem.c lz4-$l
 
 rule C-cc
   description = cc $out
-  command = cc -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  command = cc -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib -flto $in -o $out
   depfile = $out.d
 
 rule C-ar
@@ -53,7 +53,7 @@ rule C-so
 
 rule C-ld
   description = cc $out
-  command = cc -s -o $out $in
+  command = cc -s -flto -o $out $in
 
 build $builddir/tmp/$bin/lz4.tmp/lz4-$lz4_version/programs/bench.o: C-cc lz4-$lz4_version/programs/bench.c
 build $builddir/tmp/$bin/lz4.tmp/lz4-$lz4_version/programs/lorem.o: C-cc lz4-$lz4_version/programs/lorem.c
@@ -71,7 +71,7 @@ build $bin/lz4: C-ld $builddir/tmp/$bin/lz4.tmp/lz4-$lz4_version/programs/bench.
 
 rule zigcc-linux-x86_64-cc
   description = zig cc -target x86_64-linux-gnu $out
-  command = zig cc -target x86_64-linux-gnu -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  command = zig cc -target x86_64-linux-gnu -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib -flto $in -o $out
   depfile = $out.d
 
 rule zigcc-linux-x86_64-ar
@@ -84,7 +84,7 @@ rule zigcc-linux-x86_64-so
 
 rule zigcc-linux-x86_64-ld
   description = zig cc -target x86_64-linux-gnu $out
-  command = zig cc -target x86_64-linux-gnu -s -o $out $in
+  command = zig cc -target x86_64-linux-gnu -s -flto -o $out $in
 
 build $builddir/tmp/$all/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-linux-x86_64-cc lz4-$lz4_version/programs/bench.c
 build $builddir/tmp/$all/linux-x86_64/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-linux-x86_64-cc lz4-$lz4_version/programs/lorem.c
@@ -102,7 +102,7 @@ build $all/linux-x86_64/lz4: zigcc-linux-x86_64-ld $builddir/tmp/$all/linux-x86_
 
 rule zigcc-linux-x86_64-musl-cc
   description = zig cc -target x86_64-linux-musl $out
-  command = zig cc -target x86_64-linux-musl -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  command = zig cc -target x86_64-linux-musl -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib -flto $in -o $out
   depfile = $out.d
 
 rule zigcc-linux-x86_64-musl-ar
@@ -115,7 +115,7 @@ rule zigcc-linux-x86_64-musl-so
 
 rule zigcc-linux-x86_64-musl-ld
   description = zig cc -target x86_64-linux-musl $out
-  command = zig cc -target x86_64-linux-musl -s -o $out $in
+  command = zig cc -target x86_64-linux-musl -s -flto -o $out $in
 
 build $builddir/tmp/$all/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/programs/bench.c
 build $builddir/tmp/$all/linux-x86_64-musl/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-linux-x86_64-musl-cc lz4-$lz4_version/programs/lorem.c
@@ -133,7 +133,7 @@ build $all/linux-x86_64-musl/lz4: zigcc-linux-x86_64-musl-ld $builddir/tmp/$all/
 
 rule zigcc-linux-aarch64-cc
   description = zig cc -target aarch64-linux-gnu $out
-  command = zig cc -target aarch64-linux-gnu -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  command = zig cc -target aarch64-linux-gnu -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib -flto $in -o $out
   depfile = $out.d
 
 rule zigcc-linux-aarch64-ar
@@ -146,7 +146,7 @@ rule zigcc-linux-aarch64-so
 
 rule zigcc-linux-aarch64-ld
   description = zig cc -target aarch64-linux-gnu $out
-  command = zig cc -target aarch64-linux-gnu -s -o $out $in
+  command = zig cc -target aarch64-linux-gnu -s -flto -o $out $in
 
 build $builddir/tmp/$all/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-linux-aarch64-cc lz4-$lz4_version/programs/bench.c
 build $builddir/tmp/$all/linux-aarch64/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-linux-aarch64-cc lz4-$lz4_version/programs/lorem.c
@@ -164,7 +164,7 @@ build $all/linux-aarch64/lz4: zigcc-linux-aarch64-ld $builddir/tmp/$all/linux-aa
 
 rule zigcc-linux-aarch64-musl-cc
   description = zig cc -target aarch64-linux-musl $out
-  command = zig cc -target aarch64-linux-musl -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  command = zig cc -target aarch64-linux-musl -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib -flto $in -o $out
   depfile = $out.d
 
 rule zigcc-linux-aarch64-musl-ar
@@ -177,7 +177,7 @@ rule zigcc-linux-aarch64-musl-so
 
 rule zigcc-linux-aarch64-musl-ld
   description = zig cc -target aarch64-linux-musl $out
-  command = zig cc -target aarch64-linux-musl -s -o $out $in
+  command = zig cc -target aarch64-linux-musl -s -flto -o $out $in
 
 build $builddir/tmp/$all/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/bench.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/programs/bench.c
 build $builddir/tmp/$all/linux-aarch64-musl/lz4.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-linux-aarch64-musl-cc lz4-$lz4_version/programs/lorem.c
@@ -257,7 +257,7 @@ build $all/macos-aarch64/lz4: zigcc-macos-aarch64-ld $builddir/tmp/$all/macos-aa
 
 rule zigcc-windows-x86_64-cc
   description = zig cc -target x86_64-windows-gnu $out
-  command = zig cc -target x86_64-windows-gnu -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib $in -o $out
+  command = zig cc -target x86_64-windows-gnu -c -MD -MF $depfile -O3 -s -Ilz4-$lz4_version/lib -flto $in -o $out
   depfile = $out.d
 
 rule zigcc-windows-x86_64-ar
@@ -270,7 +270,7 @@ rule zigcc-windows-x86_64-so
 
 rule zigcc-windows-x86_64-ld
   description = zig cc -target x86_64-windows-gnu $out
-  command = zig cc -target x86_64-windows-gnu -s -o $out $in
+  command = zig cc -target x86_64-windows-gnu -s -flto -o $out $in
 
 build $builddir/tmp/$all/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/bench.o: zigcc-windows-x86_64-cc lz4-$lz4_version/programs/bench.c
 build $builddir/tmp/$all/windows-x86_64/lz4.exe.tmp/lz4-$lz4_version/programs/lorem.o: zigcc-windows-x86_64-cc lz4-$lz4_version/programs/lorem.c

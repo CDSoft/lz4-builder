@@ -14,7 +14,7 @@
 -- along with lz4-builder.  If not, see <https://www.gnu.org/licenses/>.
 --
 -- For further information about lz4-builder you can visit
--- https://github.com/CDSoft/lz4-builder
+-- https://codeberg.org/cdsoft/lz4-builder
 
 var "release" "2025-01-15"
 

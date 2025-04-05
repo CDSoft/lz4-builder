@@ -1,7 +1,7 @@
 # Lz4 builder
 
 This repository just bundles [Lz4](https://github.com/lz4/lz4) into a Git project.
-It provides a [bang](https://github.com/CDSoft/bang) file to cross compile lz4 for Linux, MacOS and Windows.
+It provides a [bang](https://codeberg.org/cdsoft/bang) file to cross compile lz4 for Linux, MacOS and Windows.
 
 # Usage
 

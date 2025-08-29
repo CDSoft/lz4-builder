@@ -31,7 +31,6 @@ local F = require "F"
 local targets = require "targets"
 local sys = require "sys"
 
-var "builddir" ".build"
 clean "$builddir"
 
 var "tmp" "$builddir/tmp"
